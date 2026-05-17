@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1B2A4E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Códigos">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Códigos de Contenedores · aerococina</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap');
+
+  :root{
+    --aero-navy:#1B2A4E;
+    --aero-steel:#4A7BA6;
+    --aero-sky:#7FA8C9;
+    --aero-white:#FFFFFF;
+    --aero-mist:#F4F7FB;
+    --aero-smoke:#C8D3E0;
+    --aero-graphite:#3A3D45;
+    --aero-warm:#E8A45C;
+    --aero-success:#4CAF70;
+    --aero-alert:#D85A5A;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    font-family:'Inter', system-ui, sans-serif;
+    color:var(--aero-graphite);
+    background:var(--aero-mist);
+    -webkit-tap-highlight-color:transparent;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+
+  /* APP HEADER (sticky top) */
+  .app-header{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:linear-gradient(135deg,var(--aero-navy) 0%, var(--aero-steel) 100%);
+    color:var(--aero-white);
+    box-shadow:0 2px 8px rgba(0,0,0,0.15);
+    padding-top:env(safe-area-inset-top);
+  }
+  .brand-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 18px 8px;
+  }
+  .brand{
+    font-family:'Montserrat',sans-serif;
+    font-weight:800;
+    font-size:17px;
+    letter-spacing:-0.01em;
+  }
+  .brand small{
+    display:block;
+    font-weight:500;
+    font-size:11px;
+    opacity:0.8;
+    margin-top:2px;
+  }
+  .chip-warm{
+    background:var(--aero-warm);
+    color:var(--aero-navy);
+    font-family:'Montserrat',sans-serif;
+    font-weight:700;
+    font-size:11px;
+    padding:5px 11px;
+    border-radius:20px;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+  }
+
+  /* TABS */
+  .tabs{
+    display:flex;
+    overflow-x:auto;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+    padding:0 10px 4px;
+    gap:4px;
+  }
+  .tabs::-webkit-scrollbar{ display:none; }
+  .tab-btn{
+    flex:0 0 auto;
+    background:transparent;
+    border:none;
+    color:rgba(255,255,255,0.7);
+    font-family:'Montserrat',sans-serif;
+    font-weight:700;
+    font-size:13px;
+    padding:11px 16px;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    white-space:nowrap;
+    transition:color 0.15s, border-color 0.15s;
+  }
+  .tab-btn:hover{ color:var(--aero-white); }
+  .tab-btn.active{
+    color:var(--aero-white);
+    border-bottom-color:var(--aero-warm);
+  }
+
+  /* SEARCH BAR */
+  .search-row{
+    background:var(--aero-white);
+    padding:10px 14px;
+    border-bottom:1px solid var(--aero-smoke);
+    position:sticky;
+    top:96px;
+    z-index:90;
+  }
+  .search{
+    width:100%;
+    padding:10px 14px;
+    font-family:inherit;
+    font-size:15px;
+    border:1px solid var(--aero-smoke);
+    border-radius:8px;
+    background:var(--aero-mist);
+    color:var(--aero-graphite);
+    outline:none;
+  }
+  .search:focus{
+    border-color:var(--aero-steel);
+    background:var(--aero-white);
+  }
+
+  /* TAB PANELS */
+  .tab-panel{
+    display:none;
+    padding:14px;
+    max-width:1400px;
+    margin:0 auto;
+  }
+  .tab-panel.active{ display:block; }
+
+  /* INDEX PANEL */
+  .info-box{
+    background:var(--aero-white);
+    border:1px solid var(--aero-smoke);
+    border-left:4px solid var(--aero-warm);
+    border-radius:0 8px 8px 0;
+    padding:14px 18px;
+    margin-bottom:16px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  }
+  .info-box h3{
+    font-family:'Montserrat',sans-serif;
+    font-weight:700;
+    font-size:14px;
+    color:var(--aero-navy);
+    margin:0 0 8px 0;
+  }
+  .info-box p{
+    margin:0 0 6px 0;
+    font-size:13px;
+    color:var(--aero-graphite);
+  }
+  .info-box code{
+    font-family:'SF Mono','Consolas','Menlo',monospace;
+    background:var(--aero-navy);
+    color:var(--aero-white);
+    padding:2px 6px;
+    border-radius:4px;
+    font-size:12px;
+    font-weight:700;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+    gap:12px;
+    margin-top:16px;
+  }
+  .card{
+    background:var(--aero-white);
+    border:1px solid var(--aero-smoke);
+    border-radius:10px;
+    padding:14px 16px;
+    cursor:pointer;
+    transition:transform 0.1s, box-shadow 0.15s, border-color 0.15s;
+    display:block;
+    text-decoration:none;
+    color:inherit;
+  }
+  .card:active{ transform:scale(0.97); }
+  .card:hover{
+    box-shadow:0 4px 12px rgba(27,42,78,0.12);
+    border-color:var(--aero-steel);
+  }
+  .card .city{
+    font-family:'Montserrat',sans-serif;
+    font-weight:700;
+    font-size:16px;
+    color:var(--aero-navy);
+    margin-bottom:4px;
+  }
+  .card .meta{
+    font-size:12px;
+    color:var(--aero-steel);
+  }
+  .card .suffix{
+    display:inline-block;
+    background:var(--aero-navy);
+    color:var(--aero-white);
+    font-family:'SF Mono','Consolas',monospace;
+    font-weight:700;
+    font-size:14px;
+    padding:2px 9px;
+    border-radius:5px;
+    margin-right:8px;
+  }
+
+  .legend{
+    margin-top:16px;
+    background:var(--aero-white);
+    border:1px solid var(--aero-smoke);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  }
+  .legend h3{
+    background:var(--aero-navy);
+    color:var(--aero-white);
+    font-family:'Montserrat',sans-serif;
+    font-weight:700;
+    font-size:13px;
+    padding:10px 16px;
+    margin:0;
+  }
+  .legend-body{
+    padding:12px 16px;
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));
+    gap:8px 14px;
+    font-size:13px;
+  }
+  .legend-body .li{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .legend-body .ck{
+    font-family:'SF Mono','Consolas',monospace;
+    background:var(--aero-mist);
+    border:1px solid var(--aero-smoke);
+    padding:2px 7px;
+    border-radius:4px;
+    font-weight:700;
+    font-size:12px;
+    min-width:30px;
+    text-align:center;
+  }
+
+  /* BODEGA SECTIONS */
+  .bodega-header{
+    background:linear-gradient(135deg,var(--aero-navy) 0%, var(--aero-steel) 100%);
+    color:var(--aero-white);
+    padding:14px 18px;
+    border-radius:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+  }
+  .bodega-header .ttl{
+    font-family:'Montserrat',sans-serif;
+    font-weight:800;
+    font-size:18px;
+  }
+  .bodega-header .ttl small{
+    display:block;
+    font-weight:500;
+    font-size:12px;
+    opacity:0.85;
+    margin-top:3px;
+  }
+  .bodega-header .chip{
+    background:var(--aero-warm);
+    color:var(--aero-navy);
+    font-family:'SF Mono','Consolas',monospace;
+    font-weight:800;
+    font-size:18px;
+    padding:8px 16px;
+    border-radius:8px;
+  }
+
+  .codes-hero{
+    background:var(--aero-white);
+    border:1px solid var(--aero-smoke);
+    border-left:4px solid var(--aero-warm);
+    border-radius:0 8px 8px 0;
+    padding:12px 16px;
+    margin:0 0 14px 0;
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:8px;
+    font-size:13px;
+  }
+  .codes-hero .lbl{
+    font-family:'Montserrat',sans-serif;
+    font-weight:700;
+    color:var(--aero-navy);
+  }
+  .codes-hero code{
+    font-family:'SF Mono','Consolas',monospace;
+    background:var(--aero-navy);
+    color:var(--aero-white);
+    padding:2px 6px;
+    border-radius:4px;
+    font-size:12px;
+    font-weight:700;
+  }
+  .codes-hero .plus, .codes-hero .eq{
+    color:var(--aero-warm);
+    font-weight:700;
+  }
+
+  /* PP SECTIONS (plan-producto) */
+  .pp{
+    background:var(--aero-white);
+    border:1px solid var(--aero-smoke);
+    border-radius:10px;
+    margin-bottom:12px;
+    overflow:hidden;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  }
+  .pp-h{
+    background:var(--aero-navy);
+    color:var(--aero-white);
+    font-family:'Montserrat',sans-serif;
+    font-weight:700;
+    font-size:14px;
+    padding:11px 16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .pp-h .count{
+    background:var(--aero-warm);
+    color:var(--aero-navy);
+    font-size:11px;
+    padding:2px 8px;
+    border-radius:10px;
+    font-weight:700;
+  }
+  .pp-codes{
+    padding:12px;
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(110px, 1fr));
+    gap:10px;
+  }
+  .pc{
+    background:var(--aero-mist);
+    border:1px solid var(--aero-smoke);
+    border-radius:8px;
+    padding:8px;
+    text-align:center;
+    transition:transform 0.1s, border-color 0.15s;
+  }
+  .pc:hover{
+    border-color:var(--aero-steel);
+    transform:translateY(-1px);
+  }
+  .pc.ff{
+    background:#FFF6E8;
+    border-color:var(--aero-warm);
+  }
+  .pc img{
+    width:100%;
+    max-width:90px;
+    aspect-ratio:1/1;
+    object-fit:contain;
+    background:white;
+    border-radius:4px;
+    display:block;
+    margin:0 auto 6px;
+  }
+  .pc-code{
+    font-family:'SF Mono','Consolas',monospace;
+    font-weight:700;
+    font-size:13px;
+    color:var(--aero-navy);
+    margin-bottom:2px;
+  }
+  .pc-name{
+    font-size:10px;
+    color:var(--aero-steel);
+    line-height:1.2;
+  }
+
+  /* SEARCH HIGHLIGHT */
+  .pc.search-hit{
+    border-color:var(--aero-warm);
+    box-shadow:0 0 0 2px var(--aero-warm);
+    background:#FFF6E8;
+  }
+  .pc.search-hidden{
+    display:none;
+  }
+  .pp.search-empty{
+    display:none;
+  }
+
+  /* QR MODAL — fullscreen zoom on click */
+  .qr-modal{
+    position:fixed;
+    inset:0;
+    background:rgba(27,42,78,0.94);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    z-index:1000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    animation:fadeIn 0.18s ease-out;
+    cursor:zoom-out;
+  }
+  .qr-modal.show{ display:flex; }
+  @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+
+  .qr-modal-inner{
+    background:var(--aero-white);
+    border-radius:16px;
+    padding:24px 24px 20px;
+    max-width:min(92vw, 540px);
+    max-height:92vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.4);
+    position:relative;
+    animation:zoomIn 0.22s cubic-bezier(0.34,1.56,0.64,1);
+    cursor:default;
+  }
+  @keyframes zoomIn{
+    from{ transform:scale(0.5); opacity:0; }
+    to{ transform:scale(1); opacity:1; }
+  }
+
+  .qr-modal-close{
+    position:absolute;
+    top:10px;
+    right:10px;
+    background:var(--aero-mist);
+    border:none;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    font-size:22px;
+    line-height:1;
+    color:var(--aero-navy);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background 0.15s;
+  }
+  .qr-modal-close:hover{ background:var(--aero-smoke); }
+  .qr-modal-close:active{ transform:scale(0.92); }
+
+  .qr-modal img{
+    width:min(78vw, 420px);
+    height:min(78vw, 420px);
+    object-fit:contain;
+    background:white;
+    border:2px solid var(--aero-smoke);
+    border-radius:10px;
+    padding:14px;
+  }
+  .qr-modal-code{
+    font-family:'SF Mono','Consolas',monospace;
+    font-weight:800;
+    font-size:38px;
+    color:var(--aero-navy);
+    letter-spacing:0.04em;
+    margin-top:4px;
+  }
+  .qr-modal-meta{
+    font-family:'Montserrat',sans-serif;
+    font-weight:600;
+    font-size:15px;
+    color:var(--aero-steel);
+    text-align:center;
+  }
+  .qr-modal-meta b{
+    color:var(--aero-navy);
+    font-weight:700;
+  }
+  .qr-modal-hint{
+    font-size:11px;
+    color:var(--aero-smoke);
+    margin-top:4px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+  }
+
+  /* PC hover hint (cursor zoom-in) */
+  .pc{ cursor:zoom-in; }
+
+  /* FOOTER */
+  .app-footer{
+    text-align:center;
+    padding:20px 14px 30px;
+    font-size:11px;
+    color:var(--aero-steel);
+  }
+  .app-footer .ver{
+    background:var(--aero-mist);
+    padding:2px 8px;
+    border-radius:10px;
+    font-family:'SF Mono','Consolas',monospace;
+    margin-left:6px;
+  }
+
+  /* OFFLINE INDICATOR */
+  .offline-badge{
+    position:fixed;
+    bottom:14px;
+    left:50%;
+    transform:translateX(-50%);
+    background:var(--aero-alert);
+    color:var(--aero-white);
+    font-size:12px;
+    font-weight:700;
+    padding:7px 14px;
+    border-radius:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2);
+    display:none;
+    z-index:200;
+  }
+  .offline-badge.show{ display:block; }
+
+  /* RESPONSIVE - phones */
+  @media (max-width:480px){
+    .tab-btn{ font-size:12px; padding:10px 12px; }
+    .brand{ font-size:15px; }
+    .pp-codes{ grid-template-columns:repeat(2, 1fr); }
+    .pc img{ max-width:80px; }
+    .search-row{ top:90px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="brand-row">
+    <div class="brand">
+      Códigos de Contenedores
+      <small>aerococina · Sky Chefs México</small>
+    </div>
+    <div class="chip-warm">aerococina</div>
+  </div>
+  <nav class="tabs" id="tabs">
+      <button class="tab-btn" data-tab="index">Índice</button>
+      <button class="tab-btn" data-tab="X">X · MEX</button>
+      <button class="tab-btn" data-tab="N">N · NLU</button>
+      <button class="tab-btn" data-tab="C">C · CUN</button>
+      <button class="tab-btn" data-tab="G">G · GDL</button>
+      <button class="tab-btn" data-tab="Y">Y · MID</button>
+      <button class="tab-btn" data-tab="M">M · MTY</button>
+      <button class="tab-btn" data-tab="T">T · TIJ</button>
+      <button class="tab-btn" data-tab="L">L · TLC</button>
+  </nav>
+</header>
+
+<div class="search-row">
+  <input type="text" class="search" id="search" placeholder="🔍 Buscar código (ej. C1EX, FFVM, papas)" autocomplete="off">
+</div>
+
+<section id="tab-index" class="tab-panel active">
+
+  <div class="info-box">
+    <h3>Estructura del código (4 caracteres)</h3>
+    <p>
+      <code>Posición</code> (2 chars) +
+      <code>Plan</code> (1 char: E/V/J/B/L/G/H) +
+      <code>Bodega</code> (1 char: X/N/C/G/Y/M/T/L) =
+      <code>Código QR</code>
+    </p>
+    <p style="margin-top:6px; font-size:12px; color:var(--aero-steel);">
+      Ejemplo: <code>C1EN</code> = Carro 1 + ENE26 + AIFA &nbsp;|&nbsp;
+      <code>FFVM</code> = Fresh Food + VBJ + Monterrey &nbsp;|&nbsp;
+      <code>CHT</code> = Charter + Tijuana (3 chars, excepción)
+    </p>
+  </div>
+
+  <div class="grid">
+  <a class="card" data-jump="X">
+    <div class="city"><span class="suffix">X</span> Mexico City</div>
+    <div class="meta">MEX · 56 contenedores · Bodega principal</div>
+  </a>
+  <a class="card" data-jump="N">
+    <div class="city"><span class="suffix">N</span> AIFA</div>
+    <div class="meta">NLU · 56 contenedores · Felipe Ángeles</div>
+  </a>
+  <a class="card" data-jump="C">
+    <div class="city"><span class="suffix">C</span> Cancún</div>
+    <div class="meta">CUN · 56 contenedores</div>
+  </a>
+  <a class="card" data-jump="G">
+    <div class="city"><span class="suffix">G</span> Guadalajara</div>
+    <div class="meta">GDL · 56 contenedores</div>
+  </a>
+  <a class="card" data-jump="Y">
+    <div class="city"><span class="suffix">Y</span> Mérida</div>
+    <div class="meta">MID · 56 contenedores</div>
+  </a>
+  <a class="card" data-jump="M">
+    <div class="city"><span class="suffix">M</span> Monterrey</div>
+    <div class="meta">MTY · 56 contenedores</div>
+  </a>
+  <a class="card" data-jump="T">
+    <div class="city"><span class="suffix">T</span> Tijuana</div>
+    <div class="meta">TIJ · 56 contenedores</div>
+  </a>
+  <a class="card" data-jump="L">
+    <div class="city"><span class="suffix">L</span> Toluca</div>
+    <div class="meta">TLC · 56 contenedores</div>
+  </a>
+  </div>
+
+  <div class="legend">
+    <h3>Leyenda de posiciones</h3>
+    <div class="legend-body">
+      <div class="li"><span class="ck">C1</span><span>Carro 1</span></div>
+      <div class="li"><span class="ck">C2</span><span>Carro 2</span></div>
+      <div class="li"><span class="ck">C3</span><span>Carro 3</span></div>
+      <div class="li"><span class="ck">C4</span><span>Carro 4</span></div>
+      <div class="li"><span class="ck">CF</span><span>Café</span></div>
+      <div class="li"><span class="ck">CV</span><span>Cava</span></div>
+      <div class="li"><span class="ck">V2</span><span>Cava 2</span></div>
+      <div class="li"><span class="ck">SP</span><span>Sopas</span></div>
+      <div class="li"><span class="ck">SX</span><span>Sopa Extra</span></div>
+      <div class="li"><span class="ck">SO</span><span>Sopas (BOG)</span></div>
+      <div class="li"><span class="ck">IM</span><span>Impresoras</span></div>
+      <div class="li"><span class="ck">PA</span><span>Papas</span></div>
+      <div class="li"><span class="ck">P2</span><span>Papas 2</span></div>
+      <div class="li"><span class="ck">FF</span><span>Fresh Food</span></div>
+      <div class="li"><span class="ck">CH</span><span>Charter</span></div>
+      <div class="li"><span class="ck">PA2</span><span>Papas 2 (JFK)</span></div>
+    </div>
+  </div>
+
+  <div class="legend" style="margin-top:12px;">
+    <h3>Leyenda de planes</h3>
+    <div class="legend-body">
+      <div class="li"><span class="ck">E</span><span>ENE26</span></div>
+      <div class="li"><span class="ck">V</span><span>VBJ</span></div>
+      <div class="li"><span class="ck">J</span><span>JFK</span></div>
+      <div class="li"><span class="ck">B</span><span>BCK_USA</span></div>
+      <div class="li"><span class="ck">L</span><span>LAS</span></div>
+      <div class="li"><span class="ck">G</span><span>BOG</span></div>
+      <div class="li"><span class="ck">H</span><span>CHARTER</span></div>
+    </div>
+  </div>
+
+</section>
+
+<section id="tab-X" class="tab-panel">
+  <div class="bodega-header">
+    <div class="ttl">
+      Códigos · Mexico City
+      <small>Bodega MEX · Sufijo: X · 56 contenedores</small>
+    </div>
+    <div class="chip">X</div>
+  </div>
+<div class="codes-hero">
+  <span class="lbl">Fórmula:</span>
+  <code>posición</code> <span class="plus">+</span> <code>plan</code> <span class="plus">+</span> <code>X</code> <span class="eq">=</span> <code>código</code>
+  <span style="margin-left:3mm; font-size:8pt; color:var(--aero-steel);">Ej: C1EX = Carro 1 + ENE26 + Mexico City</span>
+</div>
+
+<div class="pp">
+  <div class="pp-h">PP_ENE26 (E) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/X/C1EX.png" alt="QR C1EX"><div class="pc-code">C1EX</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/X/C2EX.png" alt="QR C2EX"><div class="pc-code">C2EX</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/X/C3EX.png" alt="QR C3EX"><div class="pc-code">C3EX</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/X/C4EX.png" alt="QR C4EX"><div class="pc-code">C4EX</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/X/CVEX.png" alt="QR CVEX"><div class="pc-code">CVEX</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/X/CFEX.png" alt="QR CFEX"><div class="pc-code">CFEX</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/X/SPEX.png" alt="QR SPEX"><div class="pc-code">SPEX</div><div class="pc-name">Sopas</div></div>
+    <div class="pc"><img src="qr_bodegas/X/SXEX.png" alt="QR SXEX"><div class="pc-code">SXEX</div><div class="pc-name">Sopa Extra</div></div>
+    <div class="pc"><img src="qr_bodegas/X/IMEX.png" alt="QR IMEX"><div class="pc-code">IMEX</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/X/FFEX.png" alt="QR FFEX"><div class="pc-code">FFEX</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_VBJ (V) <span class="count">5 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/X/C1VX.png" alt="QR C1VX"><div class="pc-code">C1VX</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/X/C2VX.png" alt="QR C2VX"><div class="pc-code">C2VX</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/X/CVVX.png" alt="QR CVVX"><div class="pc-code">CVVX</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/X/CFVX.png" alt="QR CFVX"><div class="pc-code">CFVX</div><div class="pc-name">Café</div></div>
+    <div class="pc ff"><img src="qr_bodegas/X/FFVX.png" alt="QR FFVX"><div class="pc-code">FFVX</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_JFK (J) <span class="count">11 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/X/C1JX.png" alt="QR C1JX"><div class="pc-code">C1JX</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/X/C2JX.png" alt="QR C2JX"><div class="pc-code">C2JX</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/X/C3JX.png" alt="QR C3JX"><div class="pc-code">C3JX</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/X/C4JX.png" alt="QR C4JX"><div class="pc-code">C4JX</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/X/CVJX.png" alt="QR CVJX"><div class="pc-code">CVJX</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/X/V2JX.png" alt="QR V2JX"><div class="pc-code">V2JX</div><div class="pc-name">Cava 2</div></div>
+    <div class="pc"><img src="qr_bodegas/X/CFJX.png" alt="QR CFJX"><div class="pc-code">CFJX</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/X/IMJX.png" alt="QR IMJX"><div class="pc-code">IMJX</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc"><img src="qr_bodegas/X/PAJX.png" alt="QR PAJX"><div class="pc-code">PAJX</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/X/PA2JX.png" alt="QR PA2JX"><div class="pc-code">PA2JX</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc ff"><img src="qr_bodegas/X/FFJX.png" alt="QR FFJX"><div class="pc-code">FFJX</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_BCK_USA (B) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/X/C1BX.png" alt="QR C1BX"><div class="pc-code">C1BX</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/X/C2BX.png" alt="QR C2BX"><div class="pc-code">C2BX</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/X/C3BX.png" alt="QR C3BX"><div class="pc-code">C3BX</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/X/C4BX.png" alt="QR C4BX"><div class="pc-code">C4BX</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/X/CVBX.png" alt="QR CVBX"><div class="pc-code">CVBX</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/X/CFBX.png" alt="QR CFBX"><div class="pc-code">CFBX</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/X/PABX.png" alt="QR PABX"><div class="pc-code">PABX</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/X/P2BX.png" alt="QR P2BX"><div class="pc-code">P2BX</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc"><img src="qr_bodegas/X/IMBX.png" alt="QR IMBX"><div class="pc-code">IMBX</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/X/FFBX.png" alt="QR FFBX"><div class="pc-code">FFBX</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_LAS (L) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/X/C1LX.png" alt="QR C1LX"><div class="pc-code">C1LX</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/X/C2LX.png" alt="QR C2LX"><div class="pc-code">C2LX</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/X/C3LX.png" alt="QR C3LX"><div class="pc-code">C3LX</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/X/C4LX.png" alt="QR C4LX"><div class="pc-code">C4LX</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/X/CVLX.png" alt="QR CVLX"><div class="pc-code">CVLX</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/X/CFLX.png" alt="QR CFLX"><div class="pc-code">CFLX</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/X/PALX.png" alt="QR PALX"><div class="pc-code">PALX</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/X/P2LX.png" alt="QR P2LX"><div class="pc-code">P2LX</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc"><img src="qr_bodegas/X/IMLX.png" alt="QR IMLX"><div class="pc-code">IMLX</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/X/FFLX.png" alt="QR FFLX"><div class="pc-code">FFLX</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_BOG (G) <span class="count">8 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/X/C1GX.png" alt="QR C1GX"><div class="pc-code">C1GX</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/X/C2GX.png" alt="QR C2GX"><div class="pc-code">C2GX</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/X/C3GX.png" alt="QR C3GX"><div class="pc-code">C3GX</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/X/CVGX.png" alt="QR CVGX"><div class="pc-code">CVGX</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/X/CFGX.png" alt="QR CFGX"><div class="pc-code">CFGX</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/X/IMGX.png" alt="QR IMGX"><div class="pc-code">IMGX</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc"><img src="qr_bodegas/X/SOGX.png" alt="QR SOGX"><div class="pc-code">SOGX</div><div class="pc-name">Sopas</div></div>
+    <div class="pc ff"><img src="qr_bodegas/X/FFGX.png" alt="QR FFGX"><div class="pc-code">FFGX</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_CHARTER (H) <span class="count">2 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/X/CHX.png" alt="QR CHX"><div class="pc-code">CHX</div><div class="pc-name">Charter</div></div>
+    <div class="pc ff"><img src="qr_bodegas/X/FFHX.png" alt="QR FFHX"><div class="pc-code">FFHX</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+
+
+
+</section>
+
+<section id="tab-N" class="tab-panel">
+  <div class="bodega-header">
+    <div class="ttl">
+      Códigos · AIFA
+      <small>Bodega NLU · Sufijo: N · 56 contenedores</small>
+    </div>
+    <div class="chip">N</div>
+  </div>
+<div class="codes-hero">
+  <span class="lbl">Fórmula:</span>
+  <code>posición</code> <span class="plus">+</span> <code>plan</code> <span class="plus">+</span> <code>N</code> <span class="eq">=</span> <code>código</code>
+  <span style="margin-left:3mm; font-size:8pt; color:var(--aero-steel);">Ej: C1EN = Carro 1 + ENE26 + AIFA</span>
+</div>
+
+<div class="pp">
+  <div class="pp-h">PP_ENE26 (E) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/N/C1EN.png" alt="QR C1EN"><div class="pc-code">C1EN</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/N/C2EN.png" alt="QR C2EN"><div class="pc-code">C2EN</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/N/C3EN.png" alt="QR C3EN"><div class="pc-code">C3EN</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/N/C4EN.png" alt="QR C4EN"><div class="pc-code">C4EN</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/N/CVEN.png" alt="QR CVEN"><div class="pc-code">CVEN</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/N/CFEN.png" alt="QR CFEN"><div class="pc-code">CFEN</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/N/SPEN.png" alt="QR SPEN"><div class="pc-code">SPEN</div><div class="pc-name">Sopas</div></div>
+    <div class="pc"><img src="qr_bodegas/N/SXEN.png" alt="QR SXEN"><div class="pc-code">SXEN</div><div class="pc-name">Sopa Extra</div></div>
+    <div class="pc"><img src="qr_bodegas/N/IMEN.png" alt="QR IMEN"><div class="pc-code">IMEN</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/N/FFEN.png" alt="QR FFEN"><div class="pc-code">FFEN</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_VBJ (V) <span class="count">5 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/N/C1VN.png" alt="QR C1VN"><div class="pc-code">C1VN</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/N/C2VN.png" alt="QR C2VN"><div class="pc-code">C2VN</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/N/CVVN.png" alt="QR CVVN"><div class="pc-code">CVVN</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/N/CFVN.png" alt="QR CFVN"><div class="pc-code">CFVN</div><div class="pc-name">Café</div></div>
+    <div class="pc ff"><img src="qr_bodegas/N/FFVN.png" alt="QR FFVN"><div class="pc-code">FFVN</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_JFK (J) <span class="count">11 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/N/C1JN.png" alt="QR C1JN"><div class="pc-code">C1JN</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/N/C2JN.png" alt="QR C2JN"><div class="pc-code">C2JN</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/N/C3JN.png" alt="QR C3JN"><div class="pc-code">C3JN</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/N/C4JN.png" alt="QR C4JN"><div class="pc-code">C4JN</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/N/CVJN.png" alt="QR CVJN"><div class="pc-code">CVJN</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/N/V2JN.png" alt="QR V2JN"><div class="pc-code">V2JN</div><div class="pc-name">Cava 2</div></div>
+    <div class="pc"><img src="qr_bodegas/N/CFJN.png" alt="QR CFJN"><div class="pc-code">CFJN</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/N/IMJN.png" alt="QR IMJN"><div class="pc-code">IMJN</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc"><img src="qr_bodegas/N/PAJN.png" alt="QR PAJN"><div class="pc-code">PAJN</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/N/PA2JN.png" alt="QR PA2JN"><div class="pc-code">PA2JN</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc ff"><img src="qr_bodegas/N/FFJN.png" alt="QR FFJN"><div class="pc-code">FFJN</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_BCK_USA (B) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/N/C1BN.png" alt="QR C1BN"><div class="pc-code">C1BN</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/N/C2BN.png" alt="QR C2BN"><div class="pc-code">C2BN</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/N/C3BN.png" alt="QR C3BN"><div class="pc-code">C3BN</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/N/C4BN.png" alt="QR C4BN"><div class="pc-code">C4BN</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/N/CVBN.png" alt="QR CVBN"><div class="pc-code">CVBN</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/N/CFBN.png" alt="QR CFBN"><div class="pc-code">CFBN</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/N/PABN.png" alt="QR PABN"><div class="pc-code">PABN</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/N/P2BN.png" alt="QR P2BN"><div class="pc-code">P2BN</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc"><img src="qr_bodegas/N/IMBN.png" alt="QR IMBN"><div class="pc-code">IMBN</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/N/FFBN.png" alt="QR FFBN"><div class="pc-code">FFBN</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_LAS (L) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/N/C1LN.png" alt="QR C1LN"><div class="pc-code">C1LN</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/N/C2LN.png" alt="QR C2LN"><div class="pc-code">C2LN</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/N/C3LN.png" alt="QR C3LN"><div class="pc-code">C3LN</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/N/C4LN.png" alt="QR C4LN"><div class="pc-code">C4LN</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/N/CVLN.png" alt="QR CVLN"><div class="pc-code">CVLN</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/N/CFLN.png" alt="QR CFLN"><div class="pc-code">CFLN</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/N/PALN.png" alt="QR PALN"><div class="pc-code">PALN</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/N/P2LN.png" alt="QR P2LN"><div class="pc-code">P2LN</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc"><img src="qr_bodegas/N/IMLN.png" alt="QR IMLN"><div class="pc-code">IMLN</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/N/FFLN.png" alt="QR FFLN"><div class="pc-code">FFLN</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_BOG (G) <span class="count">8 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/N/C1GN.png" alt="QR C1GN"><div class="pc-code">C1GN</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/N/C2GN.png" alt="QR C2GN"><div class="pc-code">C2GN</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/N/C3GN.png" alt="QR C3GN"><div class="pc-code">C3GN</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/N/CVGN.png" alt="QR CVGN"><div class="pc-code">CVGN</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/N/CFGN.png" alt="QR CFGN"><div class="pc-code">CFGN</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/N/IMGN.png" alt="QR IMGN"><div class="pc-code">IMGN</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc"><img src="qr_bodegas/N/SOGN.png" alt="QR SOGN"><div class="pc-code">SOGN</div><div class="pc-name">Sopas</div></div>
+    <div class="pc ff"><img src="qr_bodegas/N/FFGN.png" alt="QR FFGN"><div class="pc-code">FFGN</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_CHARTER (H) <span class="count">2 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/N/CHN.png" alt="QR CHN"><div class="pc-code">CHN</div><div class="pc-name">Charter</div></div>
+    <div class="pc ff"><img src="qr_bodegas/N/FFHN.png" alt="QR FFHN"><div class="pc-code">FFHN</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+
+
+
+</section>
+
+<section id="tab-C" class="tab-panel">
+  <div class="bodega-header">
+    <div class="ttl">
+      Códigos · Cancún
+      <small>Bodega CUN · Sufijo: C · 56 contenedores</small>
+    </div>
+    <div class="chip">C</div>
+  </div>
+<div class="codes-hero">
+  <span class="lbl">Fórmula:</span>
+  <code>posición</code> <span class="plus">+</span> <code>plan</code> <span class="plus">+</span> <code>C</code> <span class="eq">=</span> <code>código</code>
+  <span style="margin-left:3mm; font-size:8pt; color:var(--aero-steel);">Ej: C1EC = Carro 1 + ENE26 + Cancún</span>
+</div>
+
+<div class="pp">
+  <div class="pp-h">PP_ENE26 (E) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/C/C1EC.png" alt="QR C1EC"><div class="pc-code">C1EC</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/C/C2EC.png" alt="QR C2EC"><div class="pc-code">C2EC</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/C/C3EC.png" alt="QR C3EC"><div class="pc-code">C3EC</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/C/C4EC.png" alt="QR C4EC"><div class="pc-code">C4EC</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/C/CVEC.png" alt="QR CVEC"><div class="pc-code">CVEC</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/C/CFEC.png" alt="QR CFEC"><div class="pc-code">CFEC</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/C/SPEC.png" alt="QR SPEC"><div class="pc-code">SPEC</div><div class="pc-name">Sopas</div></div>
+    <div class="pc"><img src="qr_bodegas/C/SXEC.png" alt="QR SXEC"><div class="pc-code">SXEC</div><div class="pc-name">Sopa Extra</div></div>
+    <div class="pc"><img src="qr_bodegas/C/IMEC.png" alt="QR IMEC"><div class="pc-code">IMEC</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/C/FFEC.png" alt="QR FFEC"><div class="pc-code">FFEC</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_VBJ (V) <span class="count">5 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/C/C1VC.png" alt="QR C1VC"><div class="pc-code">C1VC</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/C/C2VC.png" alt="QR C2VC"><div class="pc-code">C2VC</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/C/CVVC.png" alt="QR CVVC"><div class="pc-code">CVVC</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/C/CFVC.png" alt="QR CFVC"><div class="pc-code">CFVC</div><div class="pc-name">Café</div></div>
+    <div class="pc ff"><img src="qr_bodegas/C/FFVC.png" alt="QR FFVC"><div class="pc-code">FFVC</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_JFK (J) <span class="count">11 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/C/C1JC.png" alt="QR C1JC"><div class="pc-code">C1JC</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/C/C2JC.png" alt="QR C2JC"><div class="pc-code">C2JC</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/C/C3JC.png" alt="QR C3JC"><div class="pc-code">C3JC</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/C/C4JC.png" alt="QR C4JC"><div class="pc-code">C4JC</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/C/CVJC.png" alt="QR CVJC"><div class="pc-code">CVJC</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/C/V2JC.png" alt="QR V2JC"><div class="pc-code">V2JC</div><div class="pc-name">Cava 2</div></div>
+    <div class="pc"><img src="qr_bodegas/C/CFJC.png" alt="QR CFJC"><div class="pc-code">CFJC</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/C/IMJC.png" alt="QR IMJC"><div class="pc-code">IMJC</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc"><img src="qr_bodegas/C/PAJC.png" alt="QR PAJC"><div class="pc-code">PAJC</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/C/PA2JC.png" alt="QR PA2JC"><div class="pc-code">PA2JC</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc ff"><img src="qr_bodegas/C/FFJC.png" alt="QR FFJC"><div class="pc-code">FFJC</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_BCK_USA (B) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/C/C1BC.png" alt="QR C1BC"><div class="pc-code">C1BC</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/C/C2BC.png" alt="QR C2BC"><div class="pc-code">C2BC</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/C/C3BC.png" alt="QR C3BC"><div class="pc-code">C3BC</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/C/C4BC.png" alt="QR C4BC"><div class="pc-code">C4BC</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/C/CVBC.png" alt="QR CVBC"><div class="pc-code">CVBC</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/C/CFBC.png" alt="QR CFBC"><div class="pc-code">CFBC</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/C/PABC.png" alt="QR PABC"><div class="pc-code">PABC</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/C/P2BC.png" alt="QR P2BC"><div class="pc-code">P2BC</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc"><img src="qr_bodegas/C/IMBC.png" alt="QR IMBC"><div class="pc-code">IMBC</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/C/FFBC.png" alt="QR FFBC"><div class="pc-code">FFBC</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_LAS (L) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/C/C1LC.png" alt="QR C1LC"><div class="pc-code">C1LC</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/C/C2LC.png" alt="QR C2LC"><div class="pc-code">C2LC</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/C/C3LC.png" alt="QR C3LC"><div class="pc-code">C3LC</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/C/C4LC.png" alt="QR C4LC"><div class="pc-code">C4LC</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/C/CVLC.png" alt="QR CVLC"><div class="pc-code">CVLC</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/C/CFLC.png" alt="QR CFLC"><div class="pc-code">CFLC</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/C/PALC.png" alt="QR PALC"><div class="pc-code">PALC</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/C/P2LC.png" alt="QR P2LC"><div class="pc-code">P2LC</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc"><img src="qr_bodegas/C/IMLC.png" alt="QR IMLC"><div class="pc-code">IMLC</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/C/FFLC.png" alt="QR FFLC"><div class="pc-code">FFLC</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_BOG (G) <span class="count">8 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/C/C1GC.png" alt="QR C1GC"><div class="pc-code">C1GC</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/C/C2GC.png" alt="QR C2GC"><div class="pc-code">C2GC</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/C/C3GC.png" alt="QR C3GC"><div class="pc-code">C3GC</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/C/CVGC.png" alt="QR CVGC"><div class="pc-code">CVGC</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/C/CFGC.png" alt="QR CFGC"><div class="pc-code">CFGC</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/C/IMGC.png" alt="QR IMGC"><div class="pc-code">IMGC</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc"><img src="qr_bodegas/C/SOGC.png" alt="QR SOGC"><div class="pc-code">SOGC</div><div class="pc-name">Sopas</div></div>
+    <div class="pc ff"><img src="qr_bodegas/C/FFGC.png" alt="QR FFGC"><div class="pc-code">FFGC</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_CHARTER (H) <span class="count">2 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/C/CHC.png" alt="QR CHC"><div class="pc-code">CHC</div><div class="pc-name">Charter</div></div>
+    <div class="pc ff"><img src="qr_bodegas/C/FFHC.png" alt="QR FFHC"><div class="pc-code">FFHC</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+
+
+
+</section>
+
+<section id="tab-G" class="tab-panel">
+  <div class="bodega-header">
+    <div class="ttl">
+      Códigos · Guadalajara
+      <small>Bodega GDL · Sufijo: G · 56 contenedores</small>
+    </div>
+    <div class="chip">G</div>
+  </div>
+<div class="codes-hero">
+  <span class="lbl">Fórmula:</span>
+  <code>posición</code> <span class="plus">+</span> <code>plan</code> <span class="plus">+</span> <code>G</code> <span class="eq">=</span> <code>código</code>
+  <span style="margin-left:3mm; font-size:8pt; color:var(--aero-steel);">Ej: C1EG = Carro 1 + ENE26 + Guadalajara</span>
+</div>
+
+<div class="pp">
+  <div class="pp-h">PP_ENE26 (E) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/G/C1EG.png" alt="QR C1EG"><div class="pc-code">C1EG</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/G/C2EG.png" alt="QR C2EG"><div class="pc-code">C2EG</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/G/C3EG.png" alt="QR C3EG"><div class="pc-code">C3EG</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/G/C4EG.png" alt="QR C4EG"><div class="pc-code">C4EG</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/G/CVEG.png" alt="QR CVEG"><div class="pc-code">CVEG</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/G/CFEG.png" alt="QR CFEG"><div class="pc-code">CFEG</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/G/SPEG.png" alt="QR SPEG"><div class="pc-code">SPEG</div><div class="pc-name">Sopas</div></div>
+    <div class="pc"><img src="qr_bodegas/G/SXEG.png" alt="QR SXEG"><div class="pc-code">SXEG</div><div class="pc-name">Sopa Extra</div></div>
+    <div class="pc"><img src="qr_bodegas/G/IMEG.png" alt="QR IMEG"><div class="pc-code">IMEG</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/G/FFEG.png" alt="QR FFEG"><div class="pc-code">FFEG</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_VBJ (V) <span class="count">5 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/G/C1VG.png" alt="QR C1VG"><div class="pc-code">C1VG</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/G/C2VG.png" alt="QR C2VG"><div class="pc-code">C2VG</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/G/CVVG.png" alt="QR CVVG"><div class="pc-code">CVVG</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/G/CFVG.png" alt="QR CFVG"><div class="pc-code">CFVG</div><div class="pc-name">Café</div></div>
+    <div class="pc ff"><img src="qr_bodegas/G/FFVG.png" alt="QR FFVG"><div class="pc-code">FFVG</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_JFK (J) <span class="count">11 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/G/C1JG.png" alt="QR C1JG"><div class="pc-code">C1JG</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/G/C2JG.png" alt="QR C2JG"><div class="pc-code">C2JG</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/G/C3JG.png" alt="QR C3JG"><div class="pc-code">C3JG</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/G/C4JG.png" alt="QR C4JG"><div class="pc-code">C4JG</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/G/CVJG.png" alt="QR CVJG"><div class="pc-code">CVJG</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/G/V2JG.png" alt="QR V2JG"><div class="pc-code">V2JG</div><div class="pc-name">Cava 2</div></div>
+    <div class="pc"><img src="qr_bodegas/G/CFJG.png" alt="QR CFJG"><div class="pc-code">CFJG</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/G/IMJG.png" alt="QR IMJG"><div class="pc-code">IMJG</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc"><img src="qr_bodegas/G/PAJG.png" alt="QR PAJG"><div class="pc-code">PAJG</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/G/PA2JG.png" alt="QR PA2JG"><div class="pc-code">PA2JG</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc ff"><img src="qr_bodegas/G/FFJG.png" alt="QR FFJG"><div class="pc-code">FFJG</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_BCK_USA (B) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/G/C1BG.png" alt="QR C1BG"><div class="pc-code">C1BG</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/G/C2BG.png" alt="QR C2BG"><div class="pc-code">C2BG</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/G/C3BG.png" alt="QR C3BG"><div class="pc-code">C3BG</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/G/C4BG.png" alt="QR C4BG"><div class="pc-code">C4BG</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/G/CVBG.png" alt="QR CVBG"><div class="pc-code">CVBG</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/G/CFBG.png" alt="QR CFBG"><div class="pc-code">CFBG</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/G/PABG.png" alt="QR PABG"><div class="pc-code">PABG</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/G/P2BG.png" alt="QR P2BG"><div class="pc-code">P2BG</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc"><img src="qr_bodegas/G/IMBG.png" alt="QR IMBG"><div class="pc-code">IMBG</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/G/FFBG.png" alt="QR FFBG"><div class="pc-code">FFBG</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_LAS (L) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/G/C1LG.png" alt="QR C1LG"><div class="pc-code">C1LG</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/G/C2LG.png" alt="QR C2LG"><div class="pc-code">C2LG</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/G/C3LG.png" alt="QR C3LG"><div class="pc-code">C3LG</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/G/C4LG.png" alt="QR C4LG"><div class="pc-code">C4LG</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/G/CVLG.png" alt="QR CVLG"><div class="pc-code">CVLG</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/G/CFLG.png" alt="QR CFLG"><div class="pc-code">CFLG</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/G/PALG.png" alt="QR PALG"><div class="pc-code">PALG</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/G/P2LG.png" alt="QR P2LG"><div class="pc-code">P2LG</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc"><img src="qr_bodegas/G/IMLG.png" alt="QR IMLG"><div class="pc-code">IMLG</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/G/FFLG.png" alt="QR FFLG"><div class="pc-code">FFLG</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_BOG (G) <span class="count">8 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/G/C1GG.png" alt="QR C1GG"><div class="pc-code">C1GG</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/G/C2GG.png" alt="QR C2GG"><div class="pc-code">C2GG</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/G/C3GG.png" alt="QR C3GG"><div class="pc-code">C3GG</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/G/CVGG.png" alt="QR CVGG"><div class="pc-code">CVGG</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/G/CFGG.png" alt="QR CFGG"><div class="pc-code">CFGG</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/G/IMGG.png" alt="QR IMGG"><div class="pc-code">IMGG</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc"><img src="qr_bodegas/G/SOGG.png" alt="QR SOGG"><div class="pc-code">SOGG</div><div class="pc-name">Sopas</div></div>
+    <div class="pc ff"><img src="qr_bodegas/G/FFGG.png" alt="QR FFGG"><div class="pc-code">FFGG</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_CHARTER (H) <span class="count">2 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/G/CHG.png" alt="QR CHG"><div class="pc-code">CHG</div><div class="pc-name">Charter</div></div>
+    <div class="pc ff"><img src="qr_bodegas/G/FFHG.png" alt="QR FFHG"><div class="pc-code">FFHG</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+
+
+
+</section>
+
+<section id="tab-Y" class="tab-panel">
+  <div class="bodega-header">
+    <div class="ttl">
+      Códigos · Mérida
+      <small>Bodega MID · Sufijo: Y · 56 contenedores</small>
+    </div>
+    <div class="chip">Y</div>
+  </div>
+<div class="codes-hero">
+  <span class="lbl">Fórmula:</span>
+  <code>posición</code> <span class="plus">+</span> <code>plan</code> <span class="plus">+</span> <code>Y</code> <span class="eq">=</span> <code>código</code>
+  <span style="margin-left:3mm; font-size:8pt; color:var(--aero-steel);">Ej: C1EY = Carro 1 + ENE26 + Mérida</span>
+</div>
+
+<div class="pp">
+  <div class="pp-h">PP_ENE26 (E) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/Y/C1EY.png" alt="QR C1EY"><div class="pc-code">C1EY</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/C2EY.png" alt="QR C2EY"><div class="pc-code">C2EY</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/C3EY.png" alt="QR C3EY"><div class="pc-code">C3EY</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/C4EY.png" alt="QR C4EY"><div class="pc-code">C4EY</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/CVEY.png" alt="QR CVEY"><div class="pc-code">CVEY</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/CFEY.png" alt="QR CFEY"><div class="pc-code">CFEY</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/SPEY.png" alt="QR SPEY"><div class="pc-code">SPEY</div><div class="pc-name">Sopas</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/SXEY.png" alt="QR SXEY"><div class="pc-code">SXEY</div><div class="pc-name">Sopa Extra</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/IMEY.png" alt="QR IMEY"><div class="pc-code">IMEY</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/Y/FFEY.png" alt="QR FFEY"><div class="pc-code">FFEY</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_VBJ (V) <span class="count">5 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/Y/C1VY.png" alt="QR C1VY"><div class="pc-code">C1VY</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/C2VY.png" alt="QR C2VY"><div class="pc-code">C2VY</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/CVVY.png" alt="QR CVVY"><div class="pc-code">CVVY</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/CFVY.png" alt="QR CFVY"><div class="pc-code">CFVY</div><div class="pc-name">Café</div></div>
+    <div class="pc ff"><img src="qr_bodegas/Y/FFVY.png" alt="QR FFVY"><div class="pc-code">FFVY</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_JFK (J) <span class="count">11 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/Y/C1JY.png" alt="QR C1JY"><div class="pc-code">C1JY</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/C2JY.png" alt="QR C2JY"><div class="pc-code">C2JY</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/C3JY.png" alt="QR C3JY"><div class="pc-code">C3JY</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/C4JY.png" alt="QR C4JY"><div class="pc-code">C4JY</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/CVJY.png" alt="QR CVJY"><div class="pc-code">CVJY</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/V2JY.png" alt="QR V2JY"><div class="pc-code">V2JY</div><div class="pc-name">Cava 2</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/CFJY.png" alt="QR CFJY"><div class="pc-code">CFJY</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/IMJY.png" alt="QR IMJY"><div class="pc-code">IMJY</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/PAJY.png" alt="QR PAJY"><div class="pc-code">PAJY</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/PA2JY.png" alt="QR PA2JY"><div class="pc-code">PA2JY</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc ff"><img src="qr_bodegas/Y/FFJY.png" alt="QR FFJY"><div class="pc-code">FFJY</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_BCK_USA (B) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/Y/C1BY.png" alt="QR C1BY"><div class="pc-code">C1BY</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/C2BY.png" alt="QR C2BY"><div class="pc-code">C2BY</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/C3BY.png" alt="QR C3BY"><div class="pc-code">C3BY</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/C4BY.png" alt="QR C4BY"><div class="pc-code">C4BY</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/CVBY.png" alt="QR CVBY"><div class="pc-code">CVBY</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/CFBY.png" alt="QR CFBY"><div class="pc-code">CFBY</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/PABY.png" alt="QR PABY"><div class="pc-code">PABY</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/P2BY.png" alt="QR P2BY"><div class="pc-code">P2BY</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/IMBY.png" alt="QR IMBY"><div class="pc-code">IMBY</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/Y/FFBY.png" alt="QR FFBY"><div class="pc-code">FFBY</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_LAS (L) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/Y/C1LY.png" alt="QR C1LY"><div class="pc-code">C1LY</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/C2LY.png" alt="QR C2LY"><div class="pc-code">C2LY</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/C3LY.png" alt="QR C3LY"><div class="pc-code">C3LY</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/C4LY.png" alt="QR C4LY"><div class="pc-code">C4LY</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/CVLY.png" alt="QR CVLY"><div class="pc-code">CVLY</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/CFLY.png" alt="QR CFLY"><div class="pc-code">CFLY</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/PALY.png" alt="QR PALY"><div class="pc-code">PALY</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/P2LY.png" alt="QR P2LY"><div class="pc-code">P2LY</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/IMLY.png" alt="QR IMLY"><div class="pc-code">IMLY</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/Y/FFLY.png" alt="QR FFLY"><div class="pc-code">FFLY</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_BOG (G) <span class="count">8 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/Y/C1GY.png" alt="QR C1GY"><div class="pc-code">C1GY</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/C2GY.png" alt="QR C2GY"><div class="pc-code">C2GY</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/C3GY.png" alt="QR C3GY"><div class="pc-code">C3GY</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/CVGY.png" alt="QR CVGY"><div class="pc-code">CVGY</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/CFGY.png" alt="QR CFGY"><div class="pc-code">CFGY</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/IMGY.png" alt="QR IMGY"><div class="pc-code">IMGY</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc"><img src="qr_bodegas/Y/SOGY.png" alt="QR SOGY"><div class="pc-code">SOGY</div><div class="pc-name">Sopas</div></div>
+    <div class="pc ff"><img src="qr_bodegas/Y/FFGY.png" alt="QR FFGY"><div class="pc-code">FFGY</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_CHARTER (H) <span class="count">2 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/Y/CHY.png" alt="QR CHY"><div class="pc-code">CHY</div><div class="pc-name">Charter</div></div>
+    <div class="pc ff"><img src="qr_bodegas/Y/FFHY.png" alt="QR FFHY"><div class="pc-code">FFHY</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+
+
+
+</section>
+
+<section id="tab-M" class="tab-panel">
+  <div class="bodega-header">
+    <div class="ttl">
+      Códigos · Monterrey
+      <small>Bodega MTY · Sufijo: M · 56 contenedores</small>
+    </div>
+    <div class="chip">M</div>
+  </div>
+<div class="codes-hero">
+  <span class="lbl">Fórmula:</span>
+  <code>posición</code> <span class="plus">+</span> <code>plan</code> <span class="plus">+</span> <code>M</code> <span class="eq">=</span> <code>código</code>
+  <span style="margin-left:3mm; font-size:8pt; color:var(--aero-steel);">Ej: C1EM = Carro 1 + ENE26 + Monterrey</span>
+</div>
+
+<div class="pp">
+  <div class="pp-h">PP_ENE26 (E) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/M/C1EM.png" alt="QR C1EM"><div class="pc-code">C1EM</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/M/C2EM.png" alt="QR C2EM"><div class="pc-code">C2EM</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/M/C3EM.png" alt="QR C3EM"><div class="pc-code">C3EM</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/M/C4EM.png" alt="QR C4EM"><div class="pc-code">C4EM</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/M/CVEM.png" alt="QR CVEM"><div class="pc-code">CVEM</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/M/CFEM.png" alt="QR CFEM"><div class="pc-code">CFEM</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/M/SPEM.png" alt="QR SPEM"><div class="pc-code">SPEM</div><div class="pc-name">Sopas</div></div>
+    <div class="pc"><img src="qr_bodegas/M/SXEM.png" alt="QR SXEM"><div class="pc-code">SXEM</div><div class="pc-name">Sopa Extra</div></div>
+    <div class="pc"><img src="qr_bodegas/M/IMEM.png" alt="QR IMEM"><div class="pc-code">IMEM</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/M/FFEM.png" alt="QR FFEM"><div class="pc-code">FFEM</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_VBJ (V) <span class="count">5 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/M/C1VM.png" alt="QR C1VM"><div class="pc-code">C1VM</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/M/C2VM.png" alt="QR C2VM"><div class="pc-code">C2VM</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/M/CVVM.png" alt="QR CVVM"><div class="pc-code">CVVM</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/M/CFVM.png" alt="QR CFVM"><div class="pc-code">CFVM</div><div class="pc-name">Café</div></div>
+    <div class="pc ff"><img src="qr_bodegas/M/FFVM.png" alt="QR FFVM"><div class="pc-code">FFVM</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_JFK (J) <span class="count">11 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/M/C1JM.png" alt="QR C1JM"><div class="pc-code">C1JM</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/M/C2JM.png" alt="QR C2JM"><div class="pc-code">C2JM</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/M/C3JM.png" alt="QR C3JM"><div class="pc-code">C3JM</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/M/C4JM.png" alt="QR C4JM"><div class="pc-code">C4JM</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/M/CVJM.png" alt="QR CVJM"><div class="pc-code">CVJM</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/M/V2JM.png" alt="QR V2JM"><div class="pc-code">V2JM</div><div class="pc-name">Cava 2</div></div>
+    <div class="pc"><img src="qr_bodegas/M/CFJM.png" alt="QR CFJM"><div class="pc-code">CFJM</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/M/IMJM.png" alt="QR IMJM"><div class="pc-code">IMJM</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc"><img src="qr_bodegas/M/PAJM.png" alt="QR PAJM"><div class="pc-code">PAJM</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/M/PA2JM.png" alt="QR PA2JM"><div class="pc-code">PA2JM</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc ff"><img src="qr_bodegas/M/FFJM.png" alt="QR FFJM"><div class="pc-code">FFJM</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_BCK_USA (B) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/M/C1BM.png" alt="QR C1BM"><div class="pc-code">C1BM</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/M/C2BM.png" alt="QR C2BM"><div class="pc-code">C2BM</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/M/C3BM.png" alt="QR C3BM"><div class="pc-code">C3BM</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/M/C4BM.png" alt="QR C4BM"><div class="pc-code">C4BM</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/M/CVBM.png" alt="QR CVBM"><div class="pc-code">CVBM</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/M/CFBM.png" alt="QR CFBM"><div class="pc-code">CFBM</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/M/PABM.png" alt="QR PABM"><div class="pc-code">PABM</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/M/P2BM.png" alt="QR P2BM"><div class="pc-code">P2BM</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc"><img src="qr_bodegas/M/IMBM.png" alt="QR IMBM"><div class="pc-code">IMBM</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/M/FFBM.png" alt="QR FFBM"><div class="pc-code">FFBM</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_LAS (L) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/M/C1LM.png" alt="QR C1LM"><div class="pc-code">C1LM</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/M/C2LM.png" alt="QR C2LM"><div class="pc-code">C2LM</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/M/C3LM.png" alt="QR C3LM"><div class="pc-code">C3LM</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/M/C4LM.png" alt="QR C4LM"><div class="pc-code">C4LM</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/M/CVLM.png" alt="QR CVLM"><div class="pc-code">CVLM</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/M/CFLM.png" alt="QR CFLM"><div class="pc-code">CFLM</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/M/PALM.png" alt="QR PALM"><div class="pc-code">PALM</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/M/P2LM.png" alt="QR P2LM"><div class="pc-code">P2LM</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc"><img src="qr_bodegas/M/IMLM.png" alt="QR IMLM"><div class="pc-code">IMLM</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/M/FFLM.png" alt="QR FFLM"><div class="pc-code">FFLM</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_BOG (G) <span class="count">8 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/M/C1GM.png" alt="QR C1GM"><div class="pc-code">C1GM</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/M/C2GM.png" alt="QR C2GM"><div class="pc-code">C2GM</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/M/C3GM.png" alt="QR C3GM"><div class="pc-code">C3GM</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/M/CVGM.png" alt="QR CVGM"><div class="pc-code">CVGM</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/M/CFGM.png" alt="QR CFGM"><div class="pc-code">CFGM</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/M/IMGM.png" alt="QR IMGM"><div class="pc-code">IMGM</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc"><img src="qr_bodegas/M/SOGM.png" alt="QR SOGM"><div class="pc-code">SOGM</div><div class="pc-name">Sopas</div></div>
+    <div class="pc ff"><img src="qr_bodegas/M/FFGM.png" alt="QR FFGM"><div class="pc-code">FFGM</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_CHARTER (H) <span class="count">2 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/M/CHM.png" alt="QR CHM"><div class="pc-code">CHM</div><div class="pc-name">Charter</div></div>
+    <div class="pc ff"><img src="qr_bodegas/M/FFHM.png" alt="QR FFHM"><div class="pc-code">FFHM</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+
+
+
+</section>
+
+<section id="tab-T" class="tab-panel">
+  <div class="bodega-header">
+    <div class="ttl">
+      Códigos · Tijuana
+      <small>Bodega TIJ · Sufijo: T · 56 contenedores</small>
+    </div>
+    <div class="chip">T</div>
+  </div>
+<div class="codes-hero">
+  <span class="lbl">Fórmula:</span>
+  <code>posición</code> <span class="plus">+</span> <code>plan</code> <span class="plus">+</span> <code>T</code> <span class="eq">=</span> <code>código</code>
+  <span style="margin-left:3mm; font-size:8pt; color:var(--aero-steel);">Ej: C1ET = Carro 1 + ENE26 + Tijuana</span>
+</div>
+
+<div class="pp">
+  <div class="pp-h">PP_ENE26 (E) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/T/C1ET.png" alt="QR C1ET"><div class="pc-code">C1ET</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/T/C2ET.png" alt="QR C2ET"><div class="pc-code">C2ET</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/T/C3ET.png" alt="QR C3ET"><div class="pc-code">C3ET</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/T/C4ET.png" alt="QR C4ET"><div class="pc-code">C4ET</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/T/CVET.png" alt="QR CVET"><div class="pc-code">CVET</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/T/CFET.png" alt="QR CFET"><div class="pc-code">CFET</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/T/SPET.png" alt="QR SPET"><div class="pc-code">SPET</div><div class="pc-name">Sopas</div></div>
+    <div class="pc"><img src="qr_bodegas/T/SXET.png" alt="QR SXET"><div class="pc-code">SXET</div><div class="pc-name">Sopa Extra</div></div>
+    <div class="pc"><img src="qr_bodegas/T/IMET.png" alt="QR IMET"><div class="pc-code">IMET</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/T/FFET.png" alt="QR FFET"><div class="pc-code">FFET</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_VBJ (V) <span class="count">5 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/T/C1VT.png" alt="QR C1VT"><div class="pc-code">C1VT</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/T/C2VT.png" alt="QR C2VT"><div class="pc-code">C2VT</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/T/CVVT.png" alt="QR CVVT"><div class="pc-code">CVVT</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/T/CFVT.png" alt="QR CFVT"><div class="pc-code">CFVT</div><div class="pc-name">Café</div></div>
+    <div class="pc ff"><img src="qr_bodegas/T/FFVT.png" alt="QR FFVT"><div class="pc-code">FFVT</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_JFK (J) <span class="count">11 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/T/C1JT.png" alt="QR C1JT"><div class="pc-code">C1JT</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/T/C2JT.png" alt="QR C2JT"><div class="pc-code">C2JT</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/T/C3JT.png" alt="QR C3JT"><div class="pc-code">C3JT</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/T/C4JT.png" alt="QR C4JT"><div class="pc-code">C4JT</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/T/CVJT.png" alt="QR CVJT"><div class="pc-code">CVJT</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/T/V2JT.png" alt="QR V2JT"><div class="pc-code">V2JT</div><div class="pc-name">Cava 2</div></div>
+    <div class="pc"><img src="qr_bodegas/T/CFJT.png" alt="QR CFJT"><div class="pc-code">CFJT</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/T/IMJT.png" alt="QR IMJT"><div class="pc-code">IMJT</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc"><img src="qr_bodegas/T/PAJT.png" alt="QR PAJT"><div class="pc-code">PAJT</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/T/PA2JT.png" alt="QR PA2JT"><div class="pc-code">PA2JT</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc ff"><img src="qr_bodegas/T/FFJT.png" alt="QR FFJT"><div class="pc-code">FFJT</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_BCK_USA (B) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/T/C1BT.png" alt="QR C1BT"><div class="pc-code">C1BT</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/T/C2BT.png" alt="QR C2BT"><div class="pc-code">C2BT</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/T/C3BT.png" alt="QR C3BT"><div class="pc-code">C3BT</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/T/C4BT.png" alt="QR C4BT"><div class="pc-code">C4BT</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/T/CVBT.png" alt="QR CVBT"><div class="pc-code">CVBT</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/T/CFBT.png" alt="QR CFBT"><div class="pc-code">CFBT</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/T/PABT.png" alt="QR PABT"><div class="pc-code">PABT</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/T/P2BT.png" alt="QR P2BT"><div class="pc-code">P2BT</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc"><img src="qr_bodegas/T/IMBT.png" alt="QR IMBT"><div class="pc-code">IMBT</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/T/FFBT.png" alt="QR FFBT"><div class="pc-code">FFBT</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_LAS (L) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/T/C1LT.png" alt="QR C1LT"><div class="pc-code">C1LT</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/T/C2LT.png" alt="QR C2LT"><div class="pc-code">C2LT</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/T/C3LT.png" alt="QR C3LT"><div class="pc-code">C3LT</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/T/C4LT.png" alt="QR C4LT"><div class="pc-code">C4LT</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/T/CVLT.png" alt="QR CVLT"><div class="pc-code">CVLT</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/T/CFLT.png" alt="QR CFLT"><div class="pc-code">CFLT</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/T/PALT.png" alt="QR PALT"><div class="pc-code">PALT</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/T/P2LT.png" alt="QR P2LT"><div class="pc-code">P2LT</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc"><img src="qr_bodegas/T/IMLT.png" alt="QR IMLT"><div class="pc-code">IMLT</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/T/FFLT.png" alt="QR FFLT"><div class="pc-code">FFLT</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_BOG (G) <span class="count">8 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/T/C1GT.png" alt="QR C1GT"><div class="pc-code">C1GT</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/T/C2GT.png" alt="QR C2GT"><div class="pc-code">C2GT</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/T/C3GT.png" alt="QR C3GT"><div class="pc-code">C3GT</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/T/CVGT.png" alt="QR CVGT"><div class="pc-code">CVGT</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/T/CFGT.png" alt="QR CFGT"><div class="pc-code">CFGT</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/T/IMGT.png" alt="QR IMGT"><div class="pc-code">IMGT</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc"><img src="qr_bodegas/T/SOGT.png" alt="QR SOGT"><div class="pc-code">SOGT</div><div class="pc-name">Sopas</div></div>
+    <div class="pc ff"><img src="qr_bodegas/T/FFGT.png" alt="QR FFGT"><div class="pc-code">FFGT</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_CHARTER (H) <span class="count">2 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/T/CHT.png" alt="QR CHT"><div class="pc-code">CHT</div><div class="pc-name">Charter</div></div>
+    <div class="pc ff"><img src="qr_bodegas/T/FFHT.png" alt="QR FFHT"><div class="pc-code">FFHT</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+
+
+
+</section>
+
+<section id="tab-L" class="tab-panel">
+  <div class="bodega-header">
+    <div class="ttl">
+      Códigos · Toluca
+      <small>Bodega TLC · Sufijo: L · 56 contenedores</small>
+    </div>
+    <div class="chip">L</div>
+  </div>
+<div class="codes-hero">
+  <span class="lbl">Fórmula:</span>
+  <code>posición</code> <span class="plus">+</span> <code>plan</code> <span class="plus">+</span> <code>L</code> <span class="eq">=</span> <code>código</code>
+  <span style="margin-left:3mm; font-size:8pt; color:var(--aero-steel);">Ej: C1EL = Carro 1 + ENE26 + Toluca</span>
+</div>
+
+<div class="pp">
+  <div class="pp-h">PP_ENE26 (E) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/L/C1EL.png" alt="QR C1EL"><div class="pc-code">C1EL</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/L/C2EL.png" alt="QR C2EL"><div class="pc-code">C2EL</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/L/C3EL.png" alt="QR C3EL"><div class="pc-code">C3EL</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/L/C4EL.png" alt="QR C4EL"><div class="pc-code">C4EL</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/L/CVEL.png" alt="QR CVEL"><div class="pc-code">CVEL</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/L/CFEL.png" alt="QR CFEL"><div class="pc-code">CFEL</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/L/SPEL.png" alt="QR SPEL"><div class="pc-code">SPEL</div><div class="pc-name">Sopas</div></div>
+    <div class="pc"><img src="qr_bodegas/L/SXEL.png" alt="QR SXEL"><div class="pc-code">SXEL</div><div class="pc-name">Sopa Extra</div></div>
+    <div class="pc"><img src="qr_bodegas/L/IMEL.png" alt="QR IMEL"><div class="pc-code">IMEL</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/L/FFEL.png" alt="QR FFEL"><div class="pc-code">FFEL</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_VBJ (V) <span class="count">5 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/L/C1VL.png" alt="QR C1VL"><div class="pc-code">C1VL</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/L/C2VL.png" alt="QR C2VL"><div class="pc-code">C2VL</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/L/CVVL.png" alt="QR CVVL"><div class="pc-code">CVVL</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/L/CFVL.png" alt="QR CFVL"><div class="pc-code">CFVL</div><div class="pc-name">Café</div></div>
+    <div class="pc ff"><img src="qr_bodegas/L/FFVL.png" alt="QR FFVL"><div class="pc-code">FFVL</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_JFK (J) <span class="count">11 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/L/C1JL.png" alt="QR C1JL"><div class="pc-code">C1JL</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/L/C2JL.png" alt="QR C2JL"><div class="pc-code">C2JL</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/L/C3JL.png" alt="QR C3JL"><div class="pc-code">C3JL</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/L/C4JL.png" alt="QR C4JL"><div class="pc-code">C4JL</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/L/CVJL.png" alt="QR CVJL"><div class="pc-code">CVJL</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/L/V2JL.png" alt="QR V2JL"><div class="pc-code">V2JL</div><div class="pc-name">Cava 2</div></div>
+    <div class="pc"><img src="qr_bodegas/L/CFJL.png" alt="QR CFJL"><div class="pc-code">CFJL</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/L/IMJL.png" alt="QR IMJL"><div class="pc-code">IMJL</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc"><img src="qr_bodegas/L/PAJL.png" alt="QR PAJL"><div class="pc-code">PAJL</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/L/PA2JL.png" alt="QR PA2JL"><div class="pc-code">PA2JL</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc ff"><img src="qr_bodegas/L/FFJL.png" alt="QR FFJL"><div class="pc-code">FFJL</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_BCK_USA (B) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/L/C1BL.png" alt="QR C1BL"><div class="pc-code">C1BL</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/L/C2BL.png" alt="QR C2BL"><div class="pc-code">C2BL</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/L/C3BL.png" alt="QR C3BL"><div class="pc-code">C3BL</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/L/C4BL.png" alt="QR C4BL"><div class="pc-code">C4BL</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/L/CVBL.png" alt="QR CVBL"><div class="pc-code">CVBL</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/L/CFBL.png" alt="QR CFBL"><div class="pc-code">CFBL</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/L/PABL.png" alt="QR PABL"><div class="pc-code">PABL</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/L/P2BL.png" alt="QR P2BL"><div class="pc-code">P2BL</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc"><img src="qr_bodegas/L/IMBL.png" alt="QR IMBL"><div class="pc-code">IMBL</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/L/FFBL.png" alt="QR FFBL"><div class="pc-code">FFBL</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_LAS (L) <span class="count">10 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/L/C1LL.png" alt="QR C1LL"><div class="pc-code">C1LL</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/L/C2LL.png" alt="QR C2LL"><div class="pc-code">C2LL</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/L/C3LL.png" alt="QR C3LL"><div class="pc-code">C3LL</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/L/C4LL.png" alt="QR C4LL"><div class="pc-code">C4LL</div><div class="pc-name">Carro 4</div></div>
+    <div class="pc"><img src="qr_bodegas/L/CVLL.png" alt="QR CVLL"><div class="pc-code">CVLL</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/L/CFLL.png" alt="QR CFLL"><div class="pc-code">CFLL</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/L/PALL.png" alt="QR PALL"><div class="pc-code">PALL</div><div class="pc-name">Papas</div></div>
+    <div class="pc"><img src="qr_bodegas/L/P2LL.png" alt="QR P2LL"><div class="pc-code">P2LL</div><div class="pc-name">Papas 2</div></div>
+    <div class="pc"><img src="qr_bodegas/L/IMLL.png" alt="QR IMLL"><div class="pc-code">IMLL</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc ff"><img src="qr_bodegas/L/FFLL.png" alt="QR FFLL"><div class="pc-code">FFLL</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_BOG (G) <span class="count">8 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/L/C1GL.png" alt="QR C1GL"><div class="pc-code">C1GL</div><div class="pc-name">Carro 1</div></div>
+    <div class="pc"><img src="qr_bodegas/L/C2GL.png" alt="QR C2GL"><div class="pc-code">C2GL</div><div class="pc-name">Carro 2</div></div>
+    <div class="pc"><img src="qr_bodegas/L/C3GL.png" alt="QR C3GL"><div class="pc-code">C3GL</div><div class="pc-name">Carro 3</div></div>
+    <div class="pc"><img src="qr_bodegas/L/CVGL.png" alt="QR CVGL"><div class="pc-code">CVGL</div><div class="pc-name">Cava</div></div>
+    <div class="pc"><img src="qr_bodegas/L/CFGL.png" alt="QR CFGL"><div class="pc-code">CFGL</div><div class="pc-name">Café</div></div>
+    <div class="pc"><img src="qr_bodegas/L/IMGL.png" alt="QR IMGL"><div class="pc-code">IMGL</div><div class="pc-name">Impresoras</div></div>
+    <div class="pc"><img src="qr_bodegas/L/SOGL.png" alt="QR SOGL"><div class="pc-code">SOGL</div><div class="pc-name">Sopas</div></div>
+    <div class="pc ff"><img src="qr_bodegas/L/FFGL.png" alt="QR FFGL"><div class="pc-code">FFGL</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+<div class="pp">
+  <div class="pp-h">PP_CHARTER (H) <span class="count">2 códigos</span></div>
+  <div class="pp-codes">
+    <div class="pc"><img src="qr_bodegas/L/CHL.png" alt="QR CHL"><div class="pc-code">CHL</div><div class="pc-name">Charter</div></div>
+    <div class="pc ff"><img src="qr_bodegas/L/FFHL.png" alt="QR FFHL"><div class="pc-code">FFHL</div><div class="pc-name">Fresh Food</div></div>
+  </div>
+</div>
+
+
+
+</section>
+
+<div class="app-footer">
+  aerococina · Códigos de Contenedores
+  <span class="ver">v1.1 · may 2026</span>
+  <br>8 bodegas · 526 contenedores · Sky Chefs México
+</div>
+
+<div class="offline-badge" id="offlineBadge">Sin conexión · usando caché local</div>
+
+<div class="qr-modal" id="qrModal" role="dialog" aria-modal="true" aria-label="QR ampliado">
+  <div class="qr-modal-inner" onclick="event.stopPropagation()">
+    <button class="qr-modal-close" id="qrModalClose" aria-label="Cerrar">×</button>
+    <img id="qrModalImg" src="" alt="">
+    <div class="qr-modal-code" id="qrModalCode"></div>
+    <div class="qr-modal-meta" id="qrModalMeta"></div>
+    <div class="qr-modal-hint">Toca afuera o ESC para cerrar</div>
+  </div>
+</div>
+
+<script>
+  // TAB SWITCHING
+  const tabs = document.getElementById('tabs');
+  const panels = document.querySelectorAll('.tab-panel');
+  function activateTab(tab) {
+    panels.forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const panel = document.getElementById('tab-' + tab);
+    const btn = document.querySelector('.tab-btn[data-tab="' + tab + '"]');
+    if (panel) panel.classList.add('active');
+    if (btn) {
+      btn.classList.add('active');
+      // Scroll tab into view
+      btn.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+    }
+    localStorage.setItem('lastTab', tab);
+    window.scrollTo({ top:0, behavior:'instant' });
+  }
+  tabs.addEventListener('click', e => {
+    if (e.target.classList.contains('tab-btn')) {
+      activateTab(e.target.dataset.tab);
+    }
+  });
+
+  // INDEX CARD JUMP
+  document.querySelectorAll('.card[data-jump]').forEach(card => {
+    card.addEventListener('click', () => activateTab(card.dataset.jump));
+  });
+
+  // RESTORE LAST TAB
+  const last = localStorage.getItem('lastTab');
+  if (last && document.getElementById('tab-' + last)) {
+    activateTab(last);
+  }
+
+  // SEARCH
+  const searchInput = document.getElementById('search');
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    if (!q) {
+      document.querySelectorAll('.pc').forEach(pc => {
+        pc.classList.remove('search-hit','search-hidden');
+      });
+      document.querySelectorAll('.pp').forEach(pp => pp.classList.remove('search-empty'));
+      return;
+    }
+    document.querySelectorAll('.pc').forEach(pc => {
+      const code = pc.querySelector('.pc-code')?.textContent.toLowerCase() || '';
+      const name = pc.querySelector('.pc-name')?.textContent.toLowerCase() || '';
+      const match = code.includes(q) || name.includes(q);
+      pc.classList.toggle('search-hit', match);
+      pc.classList.toggle('search-hidden', !match);
+    });
+    // Hide PP sections with no visible codes
+    document.querySelectorAll('.pp').forEach(pp => {
+      const visible = pp.querySelectorAll('.pc:not(.search-hidden)').length;
+      pp.classList.toggle('search-empty', visible === 0);
+    });
+  });
+
+  // OFFLINE DETECTION
+  const offlineBadge = document.getElementById('offlineBadge');
+  function updateOnline() {
+    offlineBadge.classList.toggle('show', !navigator.onLine);
+  }
+  window.addEventListener('online', updateOnline);
+  window.addEventListener('offline', updateOnline);
+  updateOnline();
+
+  // SERVICE WORKER
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(err => {
+        console.log('SW registration failed:', err);
+      });
+    });
+  }
+
+  // BROKEN IMG FALLBACK (placeholder QR if PNG missing)
+  document.querySelectorAll('.pc img').forEach(img => {
+    img.addEventListener('error', () => {
+      img.style.background = '#F4F7FB';
+      img.alt = '[QR pendiente]';
+      img.style.objectFit = 'contain';
+    });
+  });
+
+  // QR MODAL — click to enlarge
+  const qrModal = document.getElementById('qrModal');
+  const qrModalImg = document.getElementById('qrModalImg');
+  const qrModalCode = document.getElementById('qrModalCode');
+  const qrModalMeta = document.getElementById('qrModalMeta');
+  const qrModalClose = document.getElementById('qrModalClose');
+
+  function getActiveBodegaLabel() {
+    const activeTab = document.querySelector('.tab-btn.active');
+    return activeTab ? activeTab.textContent.trim() : '';
+  }
+
+  function getPpLabel(pcEl) {
+    const pp = pcEl.closest('.pp');
+    if (!pp) return '';
+    const h = pp.querySelector('.pp-h');
+    if (!h) return '';
+    // Extract just the plan name (before <span class="count">)
+    const clone = h.cloneNode(true);
+    const countEl = clone.querySelector('.count');
+    if (countEl) countEl.remove();
+    return clone.textContent.trim();
+  }
+
+  function openModal(pcEl) {
+    const img = pcEl.querySelector('img');
+    const code = pcEl.querySelector('.pc-code')?.textContent || '';
+    const name = pcEl.querySelector('.pc-name')?.textContent || '';
+    const plan = getPpLabel(pcEl);
+    const bodega = getActiveBodegaLabel();
+
+    qrModalImg.src = img.src;
+    qrModalImg.alt = 'QR ' + code;
+    qrModalCode.textContent = code;
+    qrModalMeta.innerHTML = '<b>' + name + '</b>' +
+      (plan ? ' &nbsp;·&nbsp; ' + plan : '') +
+      (bodega && bodega !== 'Índice' ? ' &nbsp;·&nbsp; ' + bodega : '');
+    qrModal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    qrModal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  // Open on click of any .pc
+  document.querySelectorAll('.pc').forEach(pc => {
+    pc.addEventListener('click', () => openModal(pc));
+  });
+
+  // Close on backdrop click
+  qrModal.addEventListener('click', closeModal);
+  // Close on close button
+  qrModalClose.addEventListener('click', e => {
+    e.stopPropagation();
+    closeModal();
+  });
+  // Close on ESC key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && qrModal.classList.contains('show')) {
+      closeModal();
+    }
+  });
+</script>
+
+</body>
+</html>
